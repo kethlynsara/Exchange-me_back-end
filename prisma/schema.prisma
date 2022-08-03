@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  cashback  String
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Address {
+  id        Int      @id @default(autoincrement())
+  cep       String
+  street    String   @unique
+  number    Int
+  district  String
+  city      String
+  uf        String
+  createdAt DateTime @default(now())
+
+  @@map("adresses")
+}
+
+model UserAddress {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  addressId Int
+  createdAt DateTime @default(now())
+
+  @@map("userAdresses")
+}
+
+enum book_state {
+  new
+  used
+}
+
+model Book {
+  id                Int        @id @default(autoincrement())
+  title             String
+  author            String     @unique
+  publisher         String
+  description       String
+  conservationState book_state
+  image             String
+  price             String
+  isbn              String
+  available         Boolean
+  isFromExchange    Boolean
+  createdAt         DateTime   @default(now())
+
+  @@map("books")
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  price     String
+  createdAt DateTime @default(now())
+
+  @@map("orders")
+}
+
+model OrderBook {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  bookId    Int
+  ownerId   Int
+  createdAt DateTime @default(now())
+
+  @@map("orderBooks")
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  amount    String
+  active    Boolean
+  createdAt DateTime @default(now())
+
+  @@map("carts")
+}
+
+model CartBook {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  bookId    Int
+  createdAt DateTime @default(now())
+
+  @@map("cartBooks")
+}
+
+model Exchange {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  createdAt DateTime @default(now())
+
+  @@map("exchanges")
+}
+
+model ExchangeRequest {
+  id        Int      @id @default(autoincrement())
+  buyerId   Int
+  sellerId  Int
+  bookId    Int
+  createdAt DateTime @default(now())
+
+  @@map("exchangeRequests")
+}
