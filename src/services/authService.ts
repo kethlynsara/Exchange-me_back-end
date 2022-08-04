@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { CreateUserData } from "../repositories/authRepository.js";
+import jwt from "jsonwebtoken";
 import * as authRepository from "../repositories/authRepository.js";
 
 async function checkUser(email:string, status: "signUp" | "signIn") {
@@ -28,6 +28,25 @@ async function encrypt(password: string) {
     return passwordHash;
 }
 
+async function decrypt(password: string, registeredPassword: string) {
+    const decryptedPassword = bcrypt.compareSync(password, registeredPassword);
+
+    if (!decryptedPassword) {
+        throw {
+            type: "unauthorized",
+            message: "Invalid password!"
+        }
+    }
+}
+
+async function generateToken(userId: number, name: string) {
+    const data = { userId, name };
+    const jwtKey = process.env.JWT_KEY;
+    const config = { expiresIn: 60*60*24*30 }
+    const token = jwt.sign(data, jwtKey, config);
+    return token;
+}
+
 async function signUp(userData: authRepository.CreateSignUpData) {
     await checkUser(userData.email, "signUp");
     const passwordHash = await encrypt(userData.password);
@@ -38,6 +57,14 @@ async function signUp(userData: authRepository.CreateSignUpData) {
     });
 }
 
+async function signIn(email: string, password: string) {
+    const user = await checkUser(email, "signIn");
+    await decrypt(password, user.password);
+    const token = await generateToken(user.id, user.name);
+    return {name: user.name, userId: user.id, token}
+}
+
 export const authService = {
-    signUp
+    signUp,
+    signIn
 }
