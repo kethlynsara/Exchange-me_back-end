@@ -18,18 +18,29 @@ model User {
   cashback  String
   createdAt DateTime @default(now())
 
+  UserAddress UserAddress[]
+  Order       Order[]
+  OrderBook   OrderBook[]
+  Cart        Cart[]
+  Exchange    Exchange[]
+
+  Buyer  ExchangeRequest[] @relation("Buyer")
+  Seller ExchangeRequest[] @relation("Seller")
+
   @@map("users")
 }
 
 model Address {
   id        Int      @id @default(autoincrement())
   cep       String
-  street    String   @unique
+  street    String
   number    Int
   district  String
   city      String
   uf        String
   createdAt DateTime @default(now())
+
+  UserAddress UserAddress[]
 
   @@map("adresses")
 }
@@ -39,6 +50,9 @@ model UserAddress {
   userId    Int
   addressId Int
   createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  address Address @relation(fields: [addressId], references: [id])
 
   @@map("userAdresses")
 }
@@ -51,7 +65,7 @@ enum book_state {
 model Book {
   id                Int        @id @default(autoincrement())
   title             String
-  author            String     @unique
+  author            String
   publisher         String
   description       String
   conservationState book_state
@@ -62,6 +76,11 @@ model Book {
   isFromExchange    Boolean
   createdAt         DateTime   @default(now())
 
+  OrderBook       OrderBook[]
+  CartBook        CartBook[]
+  Exchange        Exchange[]
+  ExchangeRequest ExchangeRequest[]
+
   @@map("books")
 }
 
@@ -70,6 +89,9 @@ model Order {
   userId    Int
   price     String
   createdAt DateTime @default(now())
+
+  user      User        @relation(fields: [userId], references: [id])
+  OrderBook OrderBook[]
 
   @@map("orders")
 }
@@ -81,6 +103,10 @@ model OrderBook {
   ownerId   Int
   createdAt DateTime @default(now())
 
+  order Order @relation(fields: [orderId], references: [id])
+  owner User  @relation(fields: [ownerId], references: [id])
+  book  Book  @relation(fields: [bookId], references: [id])
+
   @@map("orderBooks")
 }
 
@@ -91,6 +117,10 @@ model Cart {
   active    Boolean
   createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
+
+  CartBook CartBook[]
+
   @@map("carts")
 }
 
@@ -99,6 +129,9 @@ model CartBook {
   cartId    Int
   bookId    Int
   createdAt DateTime @default(now())
+
+  cart Cart @relation(fields: [cartId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
 
   @@map("cartBooks")
 }
@@ -109,6 +142,9 @@ model Exchange {
   bookId    Int
   createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
   @@map("exchanges")
 }
 
@@ -118,6 +154,10 @@ model ExchangeRequest {
   sellerId  Int
   bookId    Int
   createdAt DateTime @default(now())
+
+  buyer  User @relation("Buyer", fields: [buyerId], references: [id])
+  seller User @relation("Seller", fields: [sellerId], references: [id])
+  book   Book @relation(fields: [bookId], references: [id])
 
   @@map("exchangeRequests")
 }
