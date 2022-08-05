@@ -4,6 +4,11 @@ async function getAllBooks() {
     return await bookRepository.findAll();
 }
 
+async function postBook(book: bookRepository.CreateBookData, userId: number) {
+    await bookRepository.insert(book);
+}
+
 export const bookService = {
-    getAllBooks
+    getAllBooks,
+    postBook
 }

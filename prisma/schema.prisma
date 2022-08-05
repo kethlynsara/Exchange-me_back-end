@@ -23,6 +23,7 @@ model User {
   OrderBook   OrderBook[]
   Cart        Cart[]
   Exchange    Exchange[]
+  Book        Book[]
 
   Buyer  ExchangeRequest[] @relation("Buyer")
   Seller ExchangeRequest[] @relation("Seller")
@@ -63,23 +64,27 @@ enum book_state {
 }
 
 model Book {
-  id                Int        @id @default(autoincrement())
-  title             String
-  author            String
-  publisher         String
-  description       String
-  conservationState book_state
-  image             String
-  price             String
-  isbn              String
-  available         Boolean
-  isFromExchange    Boolean
-  createdAt         DateTime   @default(now())
+  id                           Int        @id @default(autoincrement())
+  title                        String
+  author                       String
+  publisher                    String
+  description                  String
+  conservationState            book_state
+  conservationStateDescription String
+  image                        String
+  price                        String
+  isbn                         String
+  available                    Boolean
+  isFromExchange               Boolean
+  createdAt                    DateTime   @default(now())
+  userId                       Int
 
   OrderBook       OrderBook[]
   CartBook        CartBook[]
   Exchange        Exchange[]
   ExchangeRequest ExchangeRequest[]
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("books")
 }
