@@ -7,6 +7,10 @@ export async function findAll() {
     return prisma.book.findMany();
 }
 
+export async function findNewest() {
+    return prisma.book.findMany({orderBy: {createdAt: "desc"}});
+}
+
 export async function findByUserId(userId: number, bookTitle: string) {
     return prisma.book.findFirst({
         where: {
@@ -17,6 +21,21 @@ export async function findByUserId(userId: number, bookTitle: string) {
         orderBy: {
             createdAt: "desc"
         }
+    });
+}
+
+export async function findUserExchanges(userId: number) {
+    return prisma.book.findMany({where: {
+        userId
+    }, 
+    include: {
+        user: {
+            select: {
+                id: true,
+                cashback: true
+            }
+        }
+    }
     });
 }
 

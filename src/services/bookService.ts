@@ -1,7 +1,30 @@
 import * as bookRepository from "../repositories/bookRepository.js";
 
+function comparador() { 
+    return Math.random() - 0.5; 
+}
+
+async function getNewestBooks() {
+    return await bookRepository.findNewest();
+}
+
+async function getNewBooks() {
+    const allBooks = await bookRepository.findAll();
+    const randomBooks =  allBooks.sort(comparador);
+    return randomBooks.filter((book) => book.conservationState === "new");
+}
+
+async function getUsedBooks() {
+    const allBooks = await bookRepository.findAll();
+    const randomBooks =  allBooks.sort(comparador);
+    return randomBooks.filter((book) => book.conservationState === "used");
+}
+
 async function getAllBooks() {
-    return await bookRepository.findAll();
+    const newestBooks = await getNewestBooks();
+    const newBooks = await getNewBooks();
+    const usedBooks = await getUsedBooks();
+    return {new: newBooks, used: usedBooks, all: newestBooks}
 }
 
 async function checkUser(book: bookRepository.CreateBookData, userFromToken: number) {
