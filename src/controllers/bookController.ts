@@ -9,7 +9,7 @@ export async function getAllBooks(req: Request, res: Response) {
 
 export async function postBook(req: Request, res: Response) {
     const data: CreateBookData = req.body;
-    const userId: number = res.locals.userId
+    const userId: number = res.locals.userId;
     await bookService.postBook(data, userId);
     res.sendStatus(201);
 }
