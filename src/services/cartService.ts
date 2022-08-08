@@ -21,7 +21,7 @@ async function findUser(userId: number) {
 }
 
 async function getActiveBooks(userId: number) {
-    const books = await cartRepository.findByUserId(userId);
+    const books = await cartRepository.findBooksByUserId(userId);
     return books.filter((book) => book.active);
 }
 

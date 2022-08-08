@@ -10,3 +10,13 @@ export async function insert(cartData: CreateCartData) {
 export async function findByUserId(userId: number) {
     return prisma.cart.findMany({where: {userId}});
 }
+
+export async function findBooksByUserId(userId: number) {
+    return prisma.cart.findMany({where: {
+        userId
+    },
+    include: {
+        book: true
+    }
+    });
+}
