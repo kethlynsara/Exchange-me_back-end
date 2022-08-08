@@ -4,7 +4,9 @@ import { validateToken } from "../middlewares/tokenMiddleware.js";
 
 const exchangeRouter = Router();
 
-exchangeRouter.get("/exchanges",  validateToken, getUserExchanges);
-exchangeRouter.post("/exchanges/user/update", validateToken, updateCashback);
+exchangeRouter.use(validateToken);
+
+exchangeRouter.get("/exchanges", getUserExchanges);
+exchangeRouter.post("/exchanges/user/update", updateCashback);
 
 export default exchangeRouter;

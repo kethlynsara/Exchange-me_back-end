@@ -10,6 +10,6 @@ export async function getUserExchanges(req: Request, res: Response) {
 export async function updateCashback(req: Request, res: Response) {
     const userId: number = res.locals.userId
     const userData: UserData = req.body;
-    console.log(userId, userData, "data")
     await exchangeService.updateCashback(userId, userData.cashback);
+    res.sendStatus(201);
 }

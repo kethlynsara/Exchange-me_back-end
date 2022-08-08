@@ -80,9 +80,9 @@ model Book {
   userId                       Int
 
   OrderBook       OrderBook[]
-  CartBook        CartBook[]
   Exchange        Exchange[]
   ExchangeRequest ExchangeRequest[]
+  Cart            Cart[]
 
   user User @relation(fields: [userId], references: [id])
 
@@ -118,27 +118,14 @@ model OrderBook {
 model Cart {
   id        Int      @id @default(autoincrement())
   userId    Int
-  amount    String
+  bookId    Int
   active    Boolean
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
-
-  CartBook CartBook[]
-
-  @@map("carts")
-}
-
-model CartBook {
-  id        Int      @id @default(autoincrement())
-  cartId    Int
-  bookId    Int
-  createdAt DateTime @default(now())
-
-  cart Cart @relation(fields: [cartId], references: [id])
   book Book @relation(fields: [bookId], references: [id])
 
-  @@map("cartBooks")
+  @@map("carts")
 }
 
 model Exchange {

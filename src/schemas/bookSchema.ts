@@ -14,4 +14,4 @@ export const bookSchema = joi.object<CreateBookData>({
     available: joi.boolean().required(),
     isFromExchange: joi.boolean().required(),
     userId: joi.number().required()
-})
+});
