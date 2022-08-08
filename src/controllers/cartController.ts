@@ -8,3 +8,9 @@ export async function addBookToCart(req: Request, res: Response) {
     await cartService.addBookToCart(userId, data);
     res.sendStatus(201);
 }
+
+export async function findUserCart(req: Request, res: Response) {
+    const userId = res.locals.userId;
+    const cart = await cartService.findUserCart(userId);
+    res.send(cart);
+}

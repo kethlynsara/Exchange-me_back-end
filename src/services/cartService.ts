@@ -20,12 +20,23 @@ async function findUser(userId: number) {
     }
 }
 
+async function getActiveBooks(userId: number) {
+    const books = await cartRepository.findByUserId(userId);
+    return books.filter((book) => book.active);
+}
+
 async function addBookToCart(userId: number, data: cartRepository.CreateCartData) {
     await findUser(userId);
     await checkUser(userId, data.userId);
     await cartRepository.insert(data);
 }
 
+async function findUserCart(userId: number) {
+    await findUser(userId);
+    return await getActiveBooks(userId);
+}
+
 export const cartService = {
-    addBookToCart
+    addBookToCart,
+    findUserCart
 }
