@@ -20,10 +20,10 @@ model User {
 
   UserAddress UserAddress[]
   Order       Order[]
-  OrderBook   OrderBook[]
   Cart        Cart[]
   Exchange    Exchange[]
   Book        Book[]
+  Payment     Payment[]
 
   Buyer  ExchangeRequest[] @relation("Buyer")
   Seller ExchangeRequest[] @relation("Seller")
@@ -42,6 +42,7 @@ model Address {
   createdAt DateTime @default(now())
 
   UserAddress UserAddress[]
+  Order       Order[]
 
   @@map("adresses")
 }
@@ -56,6 +57,20 @@ model UserAddress {
   address Address @relation(fields: [addressId], references: [id])
 
   @@map("userAdresses")
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  name           String
+  number         String
+  cvv            Int
+  expirationDate String
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("payments")
 }
 
 enum book_state {
@@ -79,10 +94,9 @@ model Book {
   createdAt                    DateTime   @default(now())
   userId                       Int
 
-  OrderBook       OrderBook[]
-  Exchange        Exchange[]
-  ExchangeRequest ExchangeRequest[]
-  Cart            Cart[]
+  OrderBook OrderBook[]
+  Exchange  Exchange[]
+  Cart      Cart[]
 
   user User @relation(fields: [userId], references: [id])
 
@@ -93,9 +107,12 @@ model Order {
   id        Int      @id @default(autoincrement())
   userId    Int
   price     String
+  addressId Int
   createdAt DateTime @default(now())
 
-  user      User        @relation(fields: [userId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  address Address @relation(fields: [addressId], references: [id])
+
   OrderBook OrderBook[]
 
   @@map("orders")
@@ -105,12 +122,12 @@ model OrderBook {
   id        Int      @id @default(autoincrement())
   orderId   Int
   bookId    Int
-  ownerId   Int
   createdAt DateTime @default(now())
 
   order Order @relation(fields: [orderId], references: [id])
-  owner User  @relation(fields: [ownerId], references: [id])
   book  Book  @relation(fields: [bookId], references: [id])
+
+  ExchangeRequest ExchangeRequest[]
 
   @@map("orderBooks")
 }
@@ -141,15 +158,15 @@ model Exchange {
 }
 
 model ExchangeRequest {
-  id        Int      @id @default(autoincrement())
-  buyerId   Int
-  sellerId  Int
-  bookId    Int
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  buyerId     Int
+  sellerId    Int
+  orderBookId Int
+  createdAt   DateTime @default(now())
 
-  buyer  User @relation("Buyer", fields: [buyerId], references: [id])
-  seller User @relation("Seller", fields: [sellerId], references: [id])
-  book   Book @relation(fields: [bookId], references: [id])
+  buyer     User      @relation("Buyer", fields: [buyerId], references: [id])
+  seller    User      @relation("Seller", fields: [sellerId], references: [id])
+  orderBook OrderBook @relation(fields: [orderBookId], references: [id])
 
   @@map("exchangeRequests")
 }
