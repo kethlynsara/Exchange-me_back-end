@@ -1,13 +1,17 @@
-import { CreateAddressData } from "../repositories/userRepository.js";
+import * as userRepository from "../repositories/userRepository.js";
 
-async function findAddress(userId: number, address: CreateAddressData) {
-    
+async function findUser(userId: number) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+        throw {
+            type: "unauthorized",
+            message: "Invalid user!"
+        }
+    }
 }
 
-async function updateAddress() {
 
-}
 
 export const userService = {
-    updateAddress
+    findUser
 }

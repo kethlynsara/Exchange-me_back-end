@@ -10,7 +10,7 @@ async function findUser(userId: number) {
     }
 }
 
-async function postOrder(orderData: any, userId: number) {
+async function postOrder(orderData: any, userId: number, addressId: number) {
     await findUser(userId);
 }
 
