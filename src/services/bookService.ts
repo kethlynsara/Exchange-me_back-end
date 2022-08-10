@@ -35,6 +35,7 @@ async function getBookById(bookId: number) {
             message: "Book not found!"
         }
     }
+    return book;
 }
 
 async function checkUser(book: bookRepository.CreateBookData, userFromToken: number) {
@@ -72,5 +73,6 @@ async function updateBook(bookId: number, available: boolean) {
 export const bookService = {
     getAllBooks,
     postBook,
-    updateBook
+    updateBook,
+    getBookById
 }

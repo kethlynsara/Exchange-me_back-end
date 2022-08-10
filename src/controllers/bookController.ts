@@ -7,6 +7,12 @@ export async function getAllBooks(req: Request, res: Response) {
     res.send(books);
 }
 
+export async function getBookById(req: Request, res: Response) {
+    const { bookId } = req.params;
+    const book = await bookService.getBookById(parseInt(bookId));
+    res.send(book);
+}
+
 export async function postBook(req: Request, res: Response) {
     const data: CreateBookData = req.body;
     const userId: number = res.locals.userId;
