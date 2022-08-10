@@ -36,7 +36,12 @@ async function findUserCart(userId: number) {
     return await getActiveBooks(userId);
 }
 
+async function disableCart(userId: number) {
+    await cartRepository.updateCart(userId);
+}
+
 export const cartService = {
     addBookToCart,
-    findUserCart
+    findUserCart,
+    disableCart
 }

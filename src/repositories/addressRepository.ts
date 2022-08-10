@@ -5,18 +5,18 @@ import prisma from "../database.js";
 export type CreateAddressData = Omit<Address, "id" | "createdAt">;
 export type CreateUserAddressData = Omit<UserAddress, "id" | "createdAt">;
 
-export async function findAddress(userId: number, address: CreateAddressData) {
+export async function findAddress(address: CreateAddressData) {
     return await prisma.address.findFirst({where: {
         street: address.street,
         number: address.number,
         city: address.city,
         district: address.district,
         cep: address.cep,
-        uf: address.uf
+        uf: address.uf,
     }});
 }
 
-export async function postAddress(data: CreateAddressData) {
+export async function insertAddress(data: CreateAddressData) {
     return await prisma.address.create({data});
 }
 

@@ -20,3 +20,14 @@ export async function findBooksByUserId(userId: number) {
     }
     });
 }
+
+export async function updateCart(userId: number) {
+    return prisma.cart.updateMany({
+        where: {
+            userId,
+        },
+        data: {
+            active: false,
+        }
+    })
+}

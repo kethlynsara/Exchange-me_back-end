@@ -10,8 +10,6 @@ async function findUser(userId: number) {
     }
 }
 
-
-
 export const userService = {
     findUser
 }

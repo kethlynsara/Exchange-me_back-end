@@ -4,6 +4,6 @@ import { ExchangeRequest } from "@prisma/client";
 
 export type CreateExchangeRequestData = Omit<ExchangeRequest, "id" | "createdAt">;
 
-export async function insert(data: CreateExchangeRequestData) {
+export async function insertExchangeRequest(data: CreateExchangeRequestData) {
     return prisma.exchangeRequest.create({data});
 }
