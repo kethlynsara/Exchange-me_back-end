@@ -13,3 +13,9 @@ export async function postBook(req: Request, res: Response) {
     await bookService.postBook(data, userId);
     res.sendStatus(201);
 }
+
+export async function updateBook(req: Request, res: Response) {
+    const body = req.body;
+    await bookService.updateBook(body.id, body.available);
+    res.sendStatus(201);
+}

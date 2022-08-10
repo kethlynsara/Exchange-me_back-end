@@ -8,8 +8,16 @@ async function findUser(userId: number) {
             message: "Invalid user!"
         }
     }
+    return user;
+}
+
+async function updateCashback(userId: number, cashback: number){
+    const user = await findUser(userId);
+    const newCashback = parseFloat(user.cashback) + cashback;
+    await userRepository.updateCashback(userId, `${newCashback}`);
 }
 
 export const userService = {
-    findUser
+    findUser,
+    updateCashback
 }

@@ -12,8 +12,7 @@ async function postOrderBooks(booksFromOrder: any, orderId: number, userId: numb
         const orderBook = await orderRepository.findOrderBooks(orderId, booksFromOrder[i].bookId);
         const orderBookId = orderBook.id;
         if (booksFromOrder[i].book.isFromExchange) {
-            await exchangeRepository.insertExchangeRequest({buyerId: userId, sellerId: booksFromOrder[i].userId, orderBookId})
-            console.log('true ex', booksFromOrder[i].book.isFromExchange)
+            await exchangeRepository.insertExchangeRequest({buyerId: userId, sellerId: booksFromOrder[i].book.userId, orderBookId})
         }
     }
 }

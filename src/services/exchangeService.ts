@@ -1,5 +1,6 @@
-import * as authRepository from "../repositories/authRepository.js"
+import * as authRepository from "../repositories/authRepository.js";
 import * as bookRepository from "../repositories/bookRepository.js";
+import * as exchangeRequestRepository from "../repositories/exchangeRepository.js";
 
 export type UserData = {
     cashback: string;
@@ -24,8 +25,25 @@ async function updateCashback(id: number, cashback: string) {
     await authRepository.updateCashback(id, cashback);
 }
 
+async function getUserExchangeRequests(userId: number) {
+    return await exchangeRequestRepository.findExchangeRequests(userId);
+}
+
+async function getExchangeRequest(exchangeRequestId: number) {
+    const exchangeRequest = exchangeRequestRepository.findExchangeRequestById(exchangeRequestId);
+    if (!exchangeRequest) {
+        throw {
+            type: "not found",
+            message: "Exchange request not found!"
+        }
+    }
+    return exchangeRequest;
+}
+
 export const exchangeService = {
     getUserExchanges,
-    updateCashback
+    updateCashback,
+    getUserExchangeRequests,
+    getExchangeRequest
 }
 

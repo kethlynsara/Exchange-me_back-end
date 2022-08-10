@@ -24,6 +24,13 @@ export async function findByUserId(userId: number, bookTitle: string) {
     });
 }
 
+export async function findById(bookId: number) {
+    return prisma.book.findFirst({
+        where: {
+            id: bookId, 
+        }});
+}
+
 export async function findUserExchanges(userId: number) {
     return prisma.book.findMany({where: {
         userId
@@ -45,4 +52,15 @@ export async function insert(book: CreateBookData) {
 
 export async function insertExchange(bookId: number, userId: number) {
     return prisma.exchange.create({data: {userId, bookId}});
+}
+
+export async function updateBook(id: number, isAvailable: boolean) {
+    return prisma.book.update({
+        where: {
+            id,            
+        },
+        data: {
+            available: isAvailable
+        }
+    });
 }

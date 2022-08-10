@@ -29,5 +29,5 @@ export async function updateCart(userId: number) {
         data: {
             active: false,
         }
-    })
+    });
 }

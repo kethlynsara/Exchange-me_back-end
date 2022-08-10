@@ -27,6 +27,16 @@ async function getAllBooks() {
     return {new: newBooks, used: usedBooks, all: newestBooks}
 }
 
+async function getBookById(bookId: number) {
+    const book = await bookRepository.findById(bookId);
+    if (!book) {
+        throw {
+            type: "not found",
+            message: "Book not found!"
+        }
+    }
+}
+
 async function checkUser(book: bookRepository.CreateBookData, userFromToken: number) {
     if (book.userId !== userFromToken) {
         throw {
@@ -54,7 +64,13 @@ async function postBook(book: bookRepository.CreateBookData, userFromToken: numb
     await postExchange(book, userFromToken);
 }
 
+async function updateBook(bookId: number, available: boolean) {
+    await getBookById(bookId);
+    await bookRepository.updateBook(bookId, available);
+}
+
 export const bookService = {
     getAllBooks,
-    postBook
+    postBook,
+    updateBook
 }
