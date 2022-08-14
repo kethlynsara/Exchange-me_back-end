@@ -40,8 +40,25 @@ async function disableCart(userId: number) {
     await cartRepository.updateCart(userId);
 }
 
+async function findCartElement(bookId: number, userId: number) {
+    const cartElement = await cartRepository.find(userId, bookId);
+    if (!cartElement) {
+        throw {
+            type: "not found",
+            message: "book not found in the cart"
+        }
+    }
+    return cartElement;
+}
+
+async function deleteBookFromTheCart(bookId: number, userId: number) {
+    const cartElement = await findCartElement(bookId, userId);
+    await cartRepository.deleteById(cartElement.id);
+}
+
 export const cartService = {
     addBookToCart,
     findUserCart,
-    disableCart
+    disableCart,
+    deleteBookFromTheCart
 }

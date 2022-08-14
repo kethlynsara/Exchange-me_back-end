@@ -7,6 +7,16 @@ export async function insert(cartData: CreateCartData) {
     return prisma.cart.create({data: cartData});
 }
 
+export async function find(userId: number, bookId: number) {
+    return prisma.cart.findFirst({
+        where: {
+            userId,
+            bookId,
+            active: true
+        }
+    });
+}
+
 export async function findByUserId(userId: number) {
     return prisma.cart.findMany({where: {userId}});
 }
@@ -30,4 +40,8 @@ export async function updateCart(userId: number) {
             active: false,
         }
     });
+}
+
+export async function deleteById(id: number) {
+    return prisma.cart.delete({where: {id}})
 }
