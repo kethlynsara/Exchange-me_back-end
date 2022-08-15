@@ -6,7 +6,7 @@ import { validateToken } from "../middlewares/tokenMiddleware.js";
 const bookRouter = Router();
 
 bookRouter.get("/books", getAllBooks);
-bookRouter.get("/books/:bookId", validateToken, getBookById);
+bookRouter.get("/books/:bookId", getBookById);
 bookRouter.post("/books/update", validateToken, validateUpdateBookData, updateBook);
 bookRouter.post("/books/register", validateToken, validateBookData, postBook);
 
