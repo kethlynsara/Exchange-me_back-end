@@ -5,5 +5,4 @@ export const orderSchema = joi.object({
     order: joi.array().required(),
     total: joi.number().required(),
     address: joi.object().required(),
-    payment: joi.object().required(),
 });

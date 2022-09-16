@@ -23,7 +23,6 @@ model User {
   Cart        Cart[]
   Exchange    Exchange[]
   Book        Book[]
-  Payment     Payment[]
 
   Buyer  ExchangeRequest[] @relation("Buyer")
   Seller ExchangeRequest[] @relation("Seller")
@@ -57,20 +56,6 @@ model UserAddress {
   address Address @relation(fields: [addressId], references: [id])
 
   @@map("userAdresses")
-}
-
-model Payment {
-  id             Int      @id @default(autoincrement())
-  userId         Int
-  name           String
-  number         String
-  cvv            Int
-  expirationDate String
-  createdAt      DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("payments")
 }
 
 enum book_state {
